@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class Joystick : MonoBehaviour
 {
-
     [SerializeField] private RectTransform handle;
     [SerializeField] private RectTransform background;
     [SerializeField] private float handleRange = 50f;
-
 
     private Vector2 input = Vector2.zero;
     private Canvas canvas;
@@ -16,7 +15,6 @@ public class Joystick : MonoBehaviour
     private Image[] handleImages;
 
     private bool isDragging = false;
-
 
     public float Horizontal => input.x;
     public float Vertical => input.y;
@@ -31,11 +29,11 @@ public class Joystick : MonoBehaviour
     }
 
     private void Update()
-
     {
-        if (Input.GetMouseButtonDown(0))
+        // Use the new Input System to detect pointer presses
+        if (IsPointerDownThisFrame())
         {
-            Vector2 screenPos = Input.mousePosition;
+            Vector2 screenPos = GetPointerPosition();
             Vector2 localPos;
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -50,9 +48,9 @@ public class Joystick : MonoBehaviour
             UpdateInput(localPos);
         }
 
-        if (Input.GetMouseButton(0) && isDragging)
+        if (isDragging && IsPointerDown())
         {
-            Vector2 screenPos = Input.mousePosition;
+            Vector2 screenPos = GetPointerPosition();
             Vector2 localPos;
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -64,19 +62,16 @@ public class Joystick : MonoBehaviour
             UpdateInput(localPos);
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (isDragging && IsPointerUpThisFrame())
         {
             input = Vector2.zero;
             handle.anchoredPosition = Vector2.zero;
             SetJoystickVisible(false);
             isDragging = false;
-
-
         }
     }
 
     private void UpdateInput(Vector2 localPos)
-
     {
         input = localPos / handleRange;
         input = (input.magnitude > 1f) ? input.normalized : input;
@@ -84,12 +79,49 @@ public class Joystick : MonoBehaviour
     }
 
     private void SetJoystickVisible(bool visible)
-
     {
         foreach (var img in backgroundImages)
             img.enabled = visible;
 
         foreach (var img in handleImages)
             img.enabled = visible;
+    }
+
+    // Input System helpers
+    private bool IsPointerDownThisFrame()
+    {
+        var mouse = Mouse.current;
+        var touch = Touchscreen.current;
+        return (mouse != null && mouse.leftButton.wasPressedThisFrame) ||
+               (touch != null && touch.primaryTouch.press.wasPressedThisFrame);
+    }
+
+    private bool IsPointerDown()
+    {
+        var mouse = Mouse.current;
+        var touch = Touchscreen.current;
+        return (mouse != null && mouse.leftButton.isPressed) ||
+               (touch != null && touch.primaryTouch.press.isPressed);
+    }
+
+    private bool IsPointerUpThisFrame()
+    {
+        var mouse = Mouse.current;
+        var touch = Touchscreen.current;
+        return (mouse != null && mouse.leftButton.wasReleasedThisFrame) ||
+               (touch != null && touch.primaryTouch.press.wasReleasedThisFrame);
+    }
+
+    private Vector2 GetPointerPosition()
+    {
+        var touch = Touchscreen.current;
+        if (touch != null && touch.primaryTouch.press.isPressed)
+            return touch.primaryTouch.position.ReadValue();
+
+        var mouse = Mouse.current;
+        if (mouse != null)
+            return mouse.position.ReadValue();
+
+        return Vector2.zero;
     }
 }

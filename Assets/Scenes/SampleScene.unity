@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 10085076}
   - component: {fileID: 10085075}
   - component: {fileID: 10085077}
+  - component: {fileID: 10085078}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -185,6 +186,18 @@ MonoBehaviour:
   fieldWidthPercent: 0.7
   spawnXPercent: 0.15
   xSegments: 6
+--- !u!114 &10085078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10085074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87b6425a1c0e05f4da8969566b017852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &76188809
 GameObject:
   m_ObjectHideFlags: 0
@@ -1865,6 +1878,8 @@ MonoBehaviour:
   aimLine: {fileID: 2074430621}
   aimLineWidth: 0.05
   aimLineColor: {r: 0, g: 1, b: 0, a: 1}
+  dottedMaterial: {fileID: 0}
+  dotSpacing: 0.5
 --- !u!58 &2074430619
 CircleCollider2D:
   m_ObjectHideFlags: 0

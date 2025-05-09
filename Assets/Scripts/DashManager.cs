@@ -13,15 +13,6 @@ public class DashManager : MonoBehaviour
         UpdateDashDisplay();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            IncreaseDash(1);
-            UpdateDashDisplay();
-        }
-    }
-
     public void IncreaseDash(int increaseAmt)
     {
         currentDashes = Mathf.Min(currentDashes + increaseAmt, maxDashes);
