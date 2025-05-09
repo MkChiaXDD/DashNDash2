@@ -2,17 +2,20 @@ using UnityEngine;
 
 public class SpeedManager : MonoBehaviour
 {
+    [Header("Dash Distance Settings")]
+    [Tooltip("Percent of screen width to use for dash distance (0–1)")]
     [Range(0f, 1f)]
-    public float dashPercent = 0.1f; // % of the smaller screen dimension
+    public float dashPercent = 0.1f;
 
+    /// <summary>
+    /// Returns a Vector2 where both components equal the world-space dash distance,
+    /// calculated as dashPercent of the **screen width**.
+    /// </summary>
     public Vector2 GetDashDistance()
     {
-        // world units for that percent of width…
+        // Convert dashPercent of screen width into world units
         float worldW = ScreenSizeHelper.PercentWidthToWorld(dashPercent);
-        // …and for that percent of height
-        float worldH = ScreenSizeHelper.PercentHeightToWorld(dashPercent);
-        // pick the smaller so it never overshoots on the short side
-        float worldDist = Mathf.Min(worldW, worldH);
-        return new Vector2(worldDist, worldDist);
+        // Always use width-based distance
+        return new Vector2(worldW, worldW);
     }
 }

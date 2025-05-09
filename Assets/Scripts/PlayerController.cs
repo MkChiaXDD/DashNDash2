@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(LineRenderer))]
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement & Dash")]
@@ -16,24 +17,40 @@ public class PlayerController : MonoBehaviour
     [Header("Scaling")]
     [SerializeField, Range(0.01f, 1f)] private float scalePercent = 0.1f;
 
+    [Header("Aim Line")]
+    [Tooltip("LineRenderer to draw the aim line")]
+    [SerializeField] private LineRenderer aimLine;
+    [SerializeField, Tooltip("Width of the aim line")] private float aimLineWidth = 0.05f;
+    [SerializeField, Tooltip("Color of the aim line")] private Color aimLineColor = Color.green;
+
     private Rigidbody2D _rb;
     private Vector2 aimDir = Vector2.right;
     private bool isDashing;
     private float normalGrav;
 
-    private Vector2 DashDist => speedManager != null
-        ? speedManager.GetDashDistance()
-        : Vector2.zero;
+    private Vector2 DashDist => speedManager != null ? speedManager.GetDashDistance() : Vector2.zero;
+
+    void Awake()
+    {
+        // Ensure LineRenderer is set up
+        if (aimLine == null)
+            aimLine = GetComponent<LineRenderer>();
+        aimLine.positionCount = 2;
+        aimLine.useWorldSpace = true;
+        aimLine.startWidth = aimLineWidth;
+        aimLine.endWidth = aimLineWidth;
+        aimLine.startColor = aimLineColor;
+        aimLine.endColor = aimLineColor;
+    }
 
     void Start()
     {
-        // scale the player sprite relative to screen height
-        transform.ScaleToScreenHeightPercent(scalePercent);
+        // scale the player
+        transform.ScaleToScreenWidthPercent(scalePercent);
 
         _rb = GetComponent<Rigidbody2D>();
         normalGrav = _rb.gravityScale;
 
-        // if you didn�t drag DashManager in, try to find one
         if (dashMgr == null)
             dashMgr = FindFirstObjectByType<DashManager>();
     }
@@ -42,27 +59,31 @@ public class PlayerController : MonoBehaviour
     {
         if (isDashing) return;
 
+        // Determine input direction
         Vector2 inputDir = Vector2.zero;
-
-        // 1) Joystick has priority
         if (joystick != null && joystick.Direction.sqrMagnitude > 0.01f)
         {
             inputDir = joystick.Direction;
         }
         else
         {
-            // 2) Fallback to mouse/touch
             Vector3 mw = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 worldMouse = new Vector2(mw.x, mw.y);
-            inputDir = (worldMouse - _rb.position).normalized;
+            inputDir = ((Vector2)mw - _rb.position).normalized;
         }
 
-        // update aim only if there�s meaningful input
         if (inputDir.sqrMagnitude > 0.001f)
             aimDir = inputDir;
 
-        // dash on space
-        if (Input.GetKeyDown(KeyCode.Space) && dashMgr.GetDashCount() > 0)
+        // update runtime aim line
+        Vector3 from = transform.position;
+        Vector3 to = from + (Vector3)aimDir * DashDist.x;
+        aimLine.SetPosition(0, from);
+        aimLine.SetPosition(1, to);
+    }
+
+    public void OnButtonDash()
+    {
+        if (dashMgr.GetDashCount() > 0)
         {
             StartCoroutine(Dash());
             dashMgr.UseDash();
@@ -76,7 +97,7 @@ public class PlayerController : MonoBehaviour
         _rb.linearVelocity = Vector2.zero;
 
         Vector2 start = _rb.position;
-        Vector2 end = start + aimDir * DashDist.x; // same X/Y distance
+        Vector2 end = start + aimDir * DashDist.x;
         float t = 0f;
 
         while (t < dashDuration)
@@ -92,14 +113,9 @@ public class PlayerController : MonoBehaviour
         isDashing = false;
     }
 
-    void OnDrawGizmos()
+    void OnDisable()
     {
-        if (!Application.isPlaying || speedManager == null) return;
-
-        Gizmos.color = Color.green;
-        Vector3 from = transform.position;
-        Vector3 to = from + (Vector3)aimDir * DashDist.x;
-        Gizmos.DrawLine(from, to);
-        Gizmos.DrawSphere(to, 0.1f);
+        if (aimLine != null)
+            aimLine.enabled = false;
     }
 }

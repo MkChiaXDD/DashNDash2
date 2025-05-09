@@ -10,7 +10,7 @@ public class Collectible : MonoBehaviour
     private void Start()
     {
         spawner = FindFirstObjectByType<CollectibleSpawner>();
-        transform.ScaleToScreenHeightPercent(scalePercent);
+        transform.ScaleToScreenPercent(scalePercent, scalePercent);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
