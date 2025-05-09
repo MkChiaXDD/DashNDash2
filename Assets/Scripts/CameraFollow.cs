@@ -7,6 +7,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform target;
     [Tooltip("How quickly the camera catches up")]
     [SerializeField] private float smoothTime = 0.2f;
+    [Tooltip("Vertical offset added above the tracked position")]
+    [SerializeField] private float yOffset = 2f;
 
     private Vector3 velocity = Vector3.zero;
     private float highestY;
@@ -22,8 +24,8 @@ public class CameraFollow : MonoBehaviour
         if (target == null) return;
 
         // only update if the player has moved above our previous high-water mark
-        if (target.position.y > highestY)
-            highestY = target.position.y;
+        if (target.position.y + yOffset > highestY)
+            highestY = target.position.y + yOffset;
 
         // lock X to 0, Y to that highestY, keep Z
         Vector3 desiredPos = new Vector3(0f, highestY, transform.position.z);
