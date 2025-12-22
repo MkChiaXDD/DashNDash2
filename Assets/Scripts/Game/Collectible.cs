@@ -5,11 +5,12 @@ public class Collectible : MonoBehaviour
 {
     [SerializeField] private CollectibleData data;
     [SerializeField] private float scalePercent = 0.05f;
-    private CollectibleSpawner spawner;
 
-    private void Start()
+    private PooledObject pooledObject;
+
+    private void Awake()
     {
-        spawner = FindFirstObjectByType<CollectibleSpawner>();
+        pooledObject = GetComponent<PooledObject>();
         transform.ScaleToScreenPercent(scalePercent, scalePercent);
     }
 
@@ -18,14 +19,12 @@ public class Collectible : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         if (AudioManager.Instance != null)
-        {
             AudioManager.Instance.PlaySFX("Collect");
-        }
 
         var dashMgr = other.GetComponent<DashManager>();
+        if (dashMgr != null)
+            dashMgr.IncreaseDash(data.changeAmount);
 
-        dashMgr.IncreaseDash(data.changeAmount);
-
-        spawner.ReturnToPool(gameObject);
+        pooledObject.ReturnToPool();
     }
 }

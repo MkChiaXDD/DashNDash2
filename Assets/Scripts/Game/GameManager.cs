@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         gameEndPanel.SetActive(true);
-        endScoreText.text = $"Score: {runBestDist:0.0}m";
-        highscoreText.text = $"Highscore: {highscore:0.0}m";
+        endScoreText.text = $"{runBestDist:0.0}m";
+        highscoreText.text = $"{highscore:0.0}m";
     }
 }

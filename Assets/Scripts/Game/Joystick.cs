@@ -15,6 +15,7 @@ public class Joystick : MonoBehaviour
     private Image[] handleImages;
 
     private bool isDragging = false;
+    private Vector2 originalAnchoredPos;
 
     public float Horizontal => input.x;
     public float Vertical => input.y;
@@ -23,14 +24,20 @@ public class Joystick : MonoBehaviour
     private void Start()
     {
         canvas = GetComponentInParent<Canvas>();
+
         backgroundImages = background.GetComponentsInChildren<Image>(true);
         handleImages = handle.GetComponentsInChildren<Image>(true);
-        SetJoystickVisible(false);
+
+        // Save original joystick position
+        originalAnchoredPos = background.anchoredPosition;
+
+        SetJoystickVisible(true);
+        ResetJoystick();
     }
 
     private void Update()
     {
-        // Use the new Input System to detect pointer presses
+        // Pointer DOWN ? teleport joystick
         if (IsPointerDownThisFrame())
         {
             Vector2 screenPos = GetPointerPosition();
@@ -43,11 +50,10 @@ public class Joystick : MonoBehaviour
                 out localPos);
 
             background.anchoredPosition = localPos;
-            SetJoystickVisible(true);
             isDragging = true;
-            UpdateInput(localPos);
         }
 
+        // Pointer HELD ? update direction
         if (isDragging && IsPointerDown())
         {
             Vector2 screenPos = GetPointerPosition();
@@ -62,20 +68,26 @@ public class Joystick : MonoBehaviour
             UpdateInput(localPos);
         }
 
+        // Pointer UP ? reset joystick
         if (isDragging && IsPointerUpThisFrame())
         {
-            input = Vector2.zero;
-            handle.anchoredPosition = Vector2.zero;
-            SetJoystickVisible(false);
-            isDragging = false;
+            ResetJoystick();
         }
     }
 
     private void UpdateInput(Vector2 localPos)
     {
         input = localPos / handleRange;
-        input = (input.magnitude > 1f) ? input.normalized : input;
+        input = input.magnitude > 1f ? input.normalized : input;
         handle.anchoredPosition = input * handleRange;
+    }
+
+    private void ResetJoystick()
+    {
+        input = Vector2.zero;
+        handle.anchoredPosition = Vector2.zero;
+        background.anchoredPosition = originalAnchoredPos;
+        isDragging = false;
     }
 
     private void SetJoystickVisible(bool visible)
@@ -87,11 +99,13 @@ public class Joystick : MonoBehaviour
             img.enabled = visible;
     }
 
-    // Input System helpers
+    // ===== Input System helpers =====
+
     private bool IsPointerDownThisFrame()
     {
         var mouse = Mouse.current;
         var touch = Touchscreen.current;
+
         return (mouse != null && mouse.leftButton.wasPressedThisFrame) ||
                (touch != null && touch.primaryTouch.press.wasPressedThisFrame);
     }
@@ -100,6 +114,7 @@ public class Joystick : MonoBehaviour
     {
         var mouse = Mouse.current;
         var touch = Touchscreen.current;
+
         return (mouse != null && mouse.leftButton.isPressed) ||
                (touch != null && touch.primaryTouch.press.isPressed);
     }
@@ -108,6 +123,7 @@ public class Joystick : MonoBehaviour
     {
         var mouse = Mouse.current;
         var touch = Touchscreen.current;
+
         return (mouse != null && mouse.leftButton.wasReleasedThisFrame) ||
                (touch != null && touch.primaryTouch.press.wasReleasedThisFrame);
     }
