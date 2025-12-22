@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      joystick_hexagon_pad_a_0: 2515522773753587476
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

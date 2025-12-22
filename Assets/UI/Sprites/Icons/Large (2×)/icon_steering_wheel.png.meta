@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icon_steering_wheel_0: 8735355648908993447
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

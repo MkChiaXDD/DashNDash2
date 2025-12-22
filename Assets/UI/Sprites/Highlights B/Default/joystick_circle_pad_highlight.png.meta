@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      joystick_circle_pad_highlight_0: 1572279233449194092
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

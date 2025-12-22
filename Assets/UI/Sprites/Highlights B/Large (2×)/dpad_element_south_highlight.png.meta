@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      dpad_element_south_highlight_0: 82816189589118707
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

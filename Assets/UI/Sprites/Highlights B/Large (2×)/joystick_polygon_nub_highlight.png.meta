@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      joystick_polygon_nub_highlight_0: -5556117168706609300
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

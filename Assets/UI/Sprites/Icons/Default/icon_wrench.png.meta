@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icon_wrench_0: 569690960561143584
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -222,7 +222,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      dpad_separate_highlight_0: -8292524998860182228
+      dpad_separate_highlight_1: 6943007849267143089
+      dpad_separate_highlight_2: -4730265656420755886
+      dpad_separate_highlight_3: -5081888249079171357
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

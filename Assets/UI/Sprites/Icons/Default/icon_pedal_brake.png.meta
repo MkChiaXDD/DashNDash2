@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      icon_pedal_brake_0: -3192777828031860508
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

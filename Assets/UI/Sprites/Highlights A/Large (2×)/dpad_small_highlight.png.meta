@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      dpad_small_highlight_0: 4159499835265006105
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
