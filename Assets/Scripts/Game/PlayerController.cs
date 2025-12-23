@@ -18,8 +18,8 @@ public class PlayerController : MonoBehaviour
     [Header("Scaling")]
     [SerializeField, Range(0.01f, 1f)] private float scalePercent = 0.1f;
 
-    [Header("Aim Indicator (Rectangle)")]
-    [SerializeField] private Transform aimIndicator; // long rectangle
+    [Header("Aim Indicator (Child Line)")]
+    [SerializeField] private Transform aimIndicator; // child object (line)
     [SerializeField] private float aimThickness = 0.15f;
 
     private Rigidbody2D rb;
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         RotateTowardsAim();
         UpdateAimIndicator();
 
-        // Keyboard dash
+        // Keyboard dash (PC testing)
         if (Keyboard.current != null &&
             Keyboard.current.spaceKey.wasPressedThisFrame &&
             dashMgr.GetDashCount() > 0)
@@ -71,12 +71,12 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 inputDir = Vector2.zero;
 
-        // Joystick first (mobile)
+        // Mobile joystick
         if (joystick != null && joystick.Direction.sqrMagnitude > 0.01f)
         {
             inputDir = joystick.Direction;
         }
-        // Pointer fallback (mouse / touch)
+        // Mouse / touch fallback
         else if (Pointer.current != null)
         {
             Vector2 screenPos = Pointer.current.position.ReadValue();
@@ -105,9 +105,21 @@ public class PlayerController : MonoBehaviour
             return;
 
         bool joystickActive = joystick.Direction.sqrMagnitude > 0.01f;
-
-        // Show ONLY while joystick is being used
         aimIndicator.gameObject.SetActive(joystickActive);
+
+        if (!joystickActive)
+            return;
+
+        // ?? MATCH AIM LINE LENGTH TO DASH DISTANCE (WORLD UNITS)
+        float dashDistance = DashDist.x;
+
+        aimIndicator.localScale = new Vector3(
+            dashDistance / 1.5f,   // length
+            aimThickness,   // thickness
+            1f
+        );
+
+        aimIndicator.localPosition = new Vector3(dashDistance / 3, 0f, 0f);
     }
 
     // ---------------- DASH ----------------

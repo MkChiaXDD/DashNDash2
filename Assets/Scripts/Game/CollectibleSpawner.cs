@@ -116,6 +116,13 @@ public class CollectibleSpawner : MonoBehaviour
 
     private int PickBiasedIndex()
     {
+        // If this is the first spawn, allow full range
+        if (lastSlotIndex < 0)
+            return Random.Range(0, xSegments);
+
+        int min = Mathf.Max(0, lastSlotIndex - 1);
+        int max = Mathf.Min(xSegments - 1, lastSlotIndex + 1);
+
         float desiredSign = (lastSpawnPos.x >= camX) ? -1f : 1f;
 
         float slotWidth = (xSegments > 1)
@@ -123,28 +130,34 @@ public class CollectibleSpawner : MonoBehaviour
             : 0f;
 
         float sum = 0f;
-        float[] weights = new float[xSegments];
+        float[] weights = new float[max - min + 1];
 
-        for (int i = 0; i < xSegments; i++)
+        int idx = 0;
+        for (int i = min; i <= max; i++)
         {
             float off = -xRangeWorld + i * slotWidth;
             float alignment = Mathf.Max(0f, Mathf.Sign(desiredSign) * Mathf.Sign(off));
 
             float w = 1f + crossSideBias * alignment;
+
             if (i == lastSlotIndex)
                 w *= (1f - repeatSlotPenalty);
 
-            weights[i] = w;
+            weights[idx++] = w;
             sum += w;
         }
 
         float r = Random.value * sum;
-        for (int i = 0; i < xSegments; i++)
+        idx = 0;
+
+        for (int i = min; i <= max; i++)
         {
-            r -= weights[i];
-            if (r <= 0f) return i;
+            r -= weights[idx++];
+            if (r <= 0f)
+                return i;
         }
 
-        return xSegments - 1;
+        return lastSlotIndex;
     }
+
 }
