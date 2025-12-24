@@ -37,7 +37,7 @@ public class MenuManager : MonoBehaviour
     {
         settingsPanel.SetActive(!settingsPanel.activeSelf);
         float highscore = PlayerPrefs.GetFloat("Highscore", 0f);
-        highscoreText.text = $"{highscore:0.0}m";
+        highscoreText.text = $"Highscore: {highscore:0.0}m";
     }
 
     public void OnButtonToggleMuteAudio()
