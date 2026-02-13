@@ -8,7 +8,6 @@ public class MenuManager : MonoBehaviour
 {
     [Header("Main Navigation")]
     [SerializeField] private string gameScene;
-    [SerializeField] private GameObject settingsPanel;
 
     [Header("Audio")]
     [SerializeField] private AudioMixer audioMixer;
@@ -24,7 +23,6 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        settingsPanel.SetActive(false);
         LoadAndApplyMute();
     }
 
@@ -33,9 +31,8 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene(gameScene);
     }
 
-    public void OnButtonToggleSettings()
+    public void OnButtonGetHighScore()
     {
-        settingsPanel.SetActive(!settingsPanel.activeSelf);
         float highscore = PlayerPrefs.GetFloat("Highscore", 0f);
         highscoreText.text = $"Highscore: {highscore:0.0}m";
     }
