@@ -64,7 +64,7 @@ public class CollectibleSpawner : MonoBehaviour
             pools[i] = pool;
         }
 
-        nextSpawnY = lastSpawnPos.y;
+        nextSpawnY = lastSpawnPos.y + yOffsetWorld;
         PrewarmRows(startRows);
     }
 
