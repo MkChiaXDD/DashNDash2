@@ -24,6 +24,7 @@ public class MenuManager : MonoBehaviour
     private void Start()
     {
         LoadAndApplyMute();
+        OnButtonGetHighScore();
     }
 
     public void OnButtonPlay()

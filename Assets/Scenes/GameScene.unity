@@ -186,7 +186,7 @@ MonoBehaviour:
   poolSizePerType: 10
   fieldWidthPercent: 0.7
   spawnXPercent: 0.15
-  xSegments: 6
+  xSegments: 4
   crossSideBias: 1
   repeatSlotPenalty: 0.75
   rowsAhead: 12
@@ -585,7 +585,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 22.178465, y: 1, z: 1}
+  m_LocalScale: {x: 22.181055, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 489666333}
@@ -1708,7 +1708,7 @@ Transform:
   m_GameObject: {fileID: 592545999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.47172, y: 0.070507355, z: 0}
+  m_LocalPosition: {x: -11.473015, y: 0.070507355, z: 0}
   m_LocalScale: {x: 1, y: 16.635792, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3115,7 +3115,7 @@ Transform:
   m_GameObject: {fileID: 1196144688}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.706745, y: 0.070507355, z: 0}
+  m_LocalPosition: {x: 11.70804, y: 0.070507355, z: 0}
   m_LocalScale: {x: 1, y: 16.635792, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
