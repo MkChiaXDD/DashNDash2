@@ -23,38 +23,87 @@ public class ShopManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InitShopItems();
-    }
-
-    private void InitShopItems()
-    {
-        for (int i = 0; i < shopItems.Count; i++)
-        {
-            GameObject newItem = Instantiate(shopItemPrefab, shopItemParent);
-            TMP_Text itemName = newItem.transform.Find("ItemName").GetComponent<TMP_Text>();
-            itemName.text = $"{shopItems[i].itemName}";
-            Image itemImage = newItem.transform.Find("ItemImage").GetComponent<Image>();
-            itemImage.sprite = shopItems[i].itemSprite;
-            TMP_Text itemPrice = newItem.transform.Find("BuyBtn/ItemPrice").GetComponent<TMP_Text>();
-            itemPrice.text = $"{shopItems[i].itemPrice}";
-        }
+        LoadOwned();
+        RefreshUI();
     }
 
     public void TryBuy(ShopData item)
     {
-        // Already owned? stop
         if (ownedItemIDs.Contains(item.itemID))
             return;
 
-        // Not enough money? stop
         if (coins < item.itemPrice)
             return;
 
-        // Buy
         coins -= item.itemPrice;
         ownedItemIDs.Add(item.itemID);
 
-        //SaveOwned();     // optional
-        //RefreshUI();     // shop item disappears, inventory shows it
+        SaveOwned();
+        RefreshUI();
+    }
+
+    private void RefreshUI()
+    {
+        ClearChildren(shopItemParent);
+        ClearChildren(inventoryItemParent);
+
+        // Build shop list (only NOT owned)
+        foreach (var item in shopItems)
+        {
+            if (ownedItemIDs.Contains(item.itemID))
+                continue;
+
+            var go = Instantiate(shopItemPrefab, shopItemParent);
+            var ui = go.GetComponent<ShopItemUI>();
+
+            bool canBuy = coins >= item.itemPrice;
+            ui.Setup(item, this, canBuy);
+        }
+
+        // Build inventory list (only owned)
+        foreach (var item in shopItems)
+        {
+            if (!ownedItemIDs.Contains(item.itemID))
+                continue;
+
+            var go = Instantiate(inventoryItemPrefab, inventoryItemParent);
+            var ui = go.GetComponent<InventoryItemUI>();
+            ui.Setup(item);
+        }
+    }
+
+    private void ClearChildren(Transform parent)
+    {
+        for (int i = parent.childCount - 1; i >= 0; i--)
+            Destroy(parent.GetChild(i).gameObject);
+    }
+
+    private const string OwnedKey = "OWNED_ITEM_IDS";
+
+    private void SaveOwned()
+    {
+        // store as comma string: "1,4,7"
+        var list = new List<int>(ownedItemIDs);
+        string s = string.Join(",", list);
+        PlayerPrefs.SetString(OwnedKey, s);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadOwned()
+    {
+        ownedItemIDs.Clear();
+
+        string s = PlayerPrefs.GetString(OwnedKey, "");
+        if (string.IsNullOrEmpty(s))
+            return;
+
+        string[] parts = s.Split(',');
+        foreach (var p in parts)
+        {
+            if (int.TryParse(p, out int id))
+                ownedItemIDs.Add(id);
+        }
     }
 }
+
+
