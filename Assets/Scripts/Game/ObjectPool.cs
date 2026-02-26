@@ -42,9 +42,10 @@ public class ObjectPool : MonoBehaviour
         obj.SetActive(false);
 
         // Assign pool reference
-        var pooled = obj.GetComponent<PooledObject>();
-        if (pooled == null)
+        if (!obj.TryGetComponent<PooledObject>(out var pooled))
+        {
             pooled = obj.AddComponent<PooledObject>();
+        }
 
         pooled.SetPool(this);
 
