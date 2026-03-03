@@ -21,9 +21,10 @@ public class Collectible : MonoBehaviour
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX("Collect");
 
-        var dashMgr = other.GetComponent<DashManager>();
-        if (dashMgr != null)
+        if (other.TryGetComponent<DashManager>(out var dashMgr))
+        {
             dashMgr.IncreaseDash(data.changeAmount);
+        }
 
         pooledObject.ReturnToPool();
     }

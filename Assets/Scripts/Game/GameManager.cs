@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite muteIcon;
     [SerializeField] private Sprite unmuteIcon;
 
+    [Header("Coins System")]
+    [SerializeField] private float distPerCoin;
+
     private bool pauseActive;
     private bool muted;
 
@@ -31,10 +34,12 @@ public class GameManager : MonoBehaviour
     private float runBestDist;
     private float highscore;
     private bool gameEnded;
+    private int coinsEarned;
 
     private const string HIGHSCORE_KEY = "Highscore";
     private const string MUTE_PREF_KEY = "MasterMuted";
     private const string MIXER_PARAM = "Master";
+    private const string COINS_KEY = "Coins";
 
     void Start()
     {
@@ -138,5 +143,11 @@ public class GameManager : MonoBehaviour
         gameEndPanel.SetActive(true);
         endScoreText.text = $"{runBestDist:0.0}m";
         highscoreText.text = $"{highscore:0.0}m";
+
+        coinsEarned = (distPerCoin > 0f) ? Mathf.FloorToInt(runBestDist / distPerCoin) : 0;
+        int currentCoins = PlayerPrefs.GetInt(COINS_KEY, 0);
+        PlayerPrefs.SetInt(COINS_KEY, currentCoins + coinsEarned);
+        PlayerPrefs.Save();
     }
 }
+    

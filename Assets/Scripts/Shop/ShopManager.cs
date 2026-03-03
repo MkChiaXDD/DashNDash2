@@ -16,14 +16,14 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private GameObject inventoryItemPrefab;
     [SerializeField] private Transform inventoryItemParent;
 
-    [Header("Player Money")]
-    [SerializeField] private int coins = 999;
+    private int coins;
 
     private HashSet<int> ownedItemIDs = new HashSet<int>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LoadOwned();
+        LoadCoins();
         RefreshUI();
     }
 
@@ -79,6 +79,7 @@ public class ShopManager : MonoBehaviour
     }
 
     private const string OwnedKey = "OWNED_ITEM_IDS";
+    private const string CoinsKey = "Coins";
 
     private void SaveOwned()
     {
@@ -103,6 +104,11 @@ public class ShopManager : MonoBehaviour
             if (int.TryParse(p, out int id))
                 ownedItemIDs.Add(id);
         }
+    }
+
+    private void LoadCoins()
+    {
+        coins = PlayerPrefs.GetInt(CoinsKey, 0);
     }
 }
 
