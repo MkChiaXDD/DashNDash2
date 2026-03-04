@@ -15,4 +15,4 @@ MonoBehaviour:
   itemID: 2
   itemName: Test2
   itemSprite: {fileID: 5540762828017717822, guid: 5f1323ee49d3dec4aa21fac5222f9f57, type: 3}
-  itemPrice: 0
+  itemPrice: 10

@@ -11,6 +11,7 @@ public class ShopManager : MonoBehaviour
     [Header("Shop UI")]
     [SerializeField] private GameObject shopItemPrefab;
     [SerializeField] private Transform shopItemParent;
+    [SerializeField] private TextMeshProUGUI coinText;
 
     [Header("InventoryUI")]
     [SerializeField] private GameObject inventoryItemPrefab;
@@ -36,6 +37,7 @@ public class ShopManager : MonoBehaviour
             return;
 
         coins -= item.itemPrice;
+        PlayerPrefs.SetInt(CoinsKey, coins);
         ownedItemIDs.Add(item.itemID);
 
         SaveOwned();
@@ -70,6 +72,9 @@ public class ShopManager : MonoBehaviour
             var ui = go.GetComponent<InventoryItemUI>();
             ui.Setup(item);
         }
+
+        // Refresh coin display
+        coinText.text = coins.ToString();
     }
 
     private void ClearChildren(Transform parent)

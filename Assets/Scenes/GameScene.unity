@@ -217,7 +217,7 @@ MonoBehaviour:
   audioIcon: {fileID: 276284087}
   muteIcon: {fileID: 21300000, guid: 738aa4f790db62c44bd671d44387c646, type: 3}
   unmuteIcon: {fileID: 21300000, guid: 9a095ce61ee7cbf4aae9dfc302e578a6, type: 3}
-  distPerCoin: 0
+  distancePerCoin: 10
 --- !u!1 &50181296
 GameObject:
   m_ObjectHideFlags: 0
