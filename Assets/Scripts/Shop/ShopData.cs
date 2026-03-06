@@ -7,4 +7,8 @@ public class ShopData : ScriptableObject
     public string itemName;
     public Sprite itemSprite;
     public int itemPrice;
+
+    [Header("Skin Bundle")]
+    public RuntimeAnimatorController animatorOverride;  // drag AnimatorOverrideController here
+    public GameObject trailPrefab;                      // particle prefab
 }

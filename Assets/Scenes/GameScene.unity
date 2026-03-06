@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 10085075}
   - component: {fileID: 10085077}
   - component: {fileID: 10085078}
+  - component: {fileID: 10085079}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -218,6 +219,21 @@ MonoBehaviour:
   muteIcon: {fileID: 21300000, guid: 738aa4f790db62c44bd671d44387c646, type: 3}
   unmuteIcon: {fileID: 21300000, guid: 9a095ce61ee7cbf4aae9dfc302e578a6, type: 3}
   distancePerCoin: 10
+--- !u!114 &10085079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10085074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c46c477a37f0749a5b45572a368850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinDatas:
+  - index: 1
+    skinPrefab: {fileID: 0}
 --- !u!1 &50181296
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +602,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 16.635792, y: 1, z: 1}
+  m_LocalScale: {x: 22.178465, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 489666333}
@@ -1709,7 +1725,7 @@ Transform:
   m_GameObject: {fileID: 592545999}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.700383, y: 0.070507355, z: 0}
+  m_LocalPosition: {x: -11.47172, y: 0.070507355, z: 0}
   m_LocalScale: {x: 1, y: 16.635792, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3116,7 +3132,7 @@ Transform:
   m_GameObject: {fileID: 1196144688}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.935409, y: 0.070507355, z: 0}
+  m_LocalPosition: {x: 11.706745, y: 0.070507355, z: 0}
   m_LocalScale: {x: 1, y: 16.635792, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
