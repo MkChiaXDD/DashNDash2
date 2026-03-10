@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform aimIndicator; // child object (line)
     [SerializeField] private float aimThickness = 0.15f;
 
+    [Header("Player Animation Controller")]
+    [SerializeField] private PlayerAnim anim;
+
     private Rigidbody2D rb;
     private Vector2 aimDir = Vector2.right;
     private bool isDashing;
@@ -136,6 +139,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
+        anim.PlayDash();
         rb.gravityScale = 0f;
         rb.linearVelocity = Vector2.zero;
 
@@ -154,6 +158,7 @@ public class PlayerController : MonoBehaviour
 
         rb.gravityScale = normalGrav;
         rb.linearVelocity = Vector2.zero;
+        anim.StopDash();
         isDashing = false;
     }
 

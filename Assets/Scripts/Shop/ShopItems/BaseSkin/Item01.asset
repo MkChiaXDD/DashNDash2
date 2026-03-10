@@ -16,3 +16,5 @@ MonoBehaviour:
   itemName: Test
   itemSprite: {fileID: 2656356285576474057, guid: 3b404de29d442b74cb5eceeb7de33ada, type: 3}
   itemPrice: 5
+  animatorOverride: {fileID: 22100000, guid: 61810d8be3d231644b0d45eb191596c1, type: 2}
+  trailPrefab: {fileID: 5619125627671313669, guid: 929eb5c84131f9f46b8834dac7e0b46d, type: 3}

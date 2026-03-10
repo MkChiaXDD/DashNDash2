@@ -787,9 +787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopItems:
-  - {fileID: 11400000, guid: bc676ff9de56eb64bbe1b5f011e7a861, type: 2}
   - {fileID: 11400000, guid: 79a352e165d9bbb4fb02b5fb583ab3d9, type: 2}
-  - {fileID: 11400000, guid: 537e06d35576fd544b196f112b2fd2de, type: 2}
   shopItemPrefab: {fileID: 4686155210184324452, guid: ee99ce00cf8b2ab44965caf833943929, type: 3}
   shopItemParent: {fileID: 2009785989}
   coinText: {fileID: 1995682502}

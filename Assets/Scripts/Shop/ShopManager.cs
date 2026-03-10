@@ -20,12 +20,24 @@ public class ShopManager : MonoBehaviour
     private int coins;
 
     private HashSet<int> ownedItemIDs = new HashSet<int>();
+
+    private const string EquippedSkinKey = "EQUIPPED_SKIN_ID";
+    private int equippedSkinID = -1;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         LoadOwned();
         LoadCoins();
+        LoadEquippedSkin();
         RefreshUI();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            AddCoins(5);
+        }
     }
 
     public void TryBuy(ShopData item)
@@ -63,6 +75,7 @@ public class ShopManager : MonoBehaviour
         }
 
         // Build inventory list (only owned)
+        // Build inventory list (only owned)
         foreach (var item in shopItems)
         {
             if (!ownedItemIDs.Contains(item.itemID))
@@ -70,11 +83,36 @@ public class ShopManager : MonoBehaviour
 
             var go = Instantiate(inventoryItemPrefab, inventoryItemParent);
             var ui = go.GetComponent<InventoryItemUI>();
-            ui.Setup(item);
+
+            bool isEquipped = (item.itemID == equippedSkinID);
+            ui.Setup(item, this, isEquipped);
         }
 
         // Refresh coin display
         coinText.text = coins.ToString();
+    }
+
+    private void LoadEquippedSkin()
+    {
+        equippedSkinID = PlayerPrefs.GetInt(EquippedSkinKey, -1);
+    }
+
+    public void Equip(ShopData item)
+    {
+        // only allow equip if owned
+        if (!ownedItemIDs.Contains(item.itemID))
+            return;
+
+        equippedSkinID = item.itemID;
+        PlayerPrefs.SetInt(EquippedSkinKey, equippedSkinID);
+        PlayerPrefs.Save();
+
+        // Apply immediately if player exists in this scene (shop+game same scene)
+        var applier = FindFirstObjectByType<PlayerSkinApplier>();
+        if (applier != null)
+            applier.Apply(item);
+
+        RefreshUI();
     }
 
     private void ClearChildren(Transform parent)
@@ -114,6 +152,21 @@ public class ShopManager : MonoBehaviour
     private void LoadCoins()
     {
         coins = PlayerPrefs.GetInt(CoinsKey, 0);
+    }
+
+    private void AddCoins(int amount)
+    {
+        coins += amount;
+
+        // save
+        PlayerPrefs.SetInt(CoinsKey, coins);
+        PlayerPrefs.Save();
+
+        // UI update (if you want it to reflect immediately)
+        if (coinText != null)
+            coinText.text = coins.ToString();
+
+        Debug.Log($"Added {amount} coins. Total coins = {coins}");
     }
 }
 
