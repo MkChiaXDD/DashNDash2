@@ -9,8 +9,8 @@ public class InventoryItemUI : MonoBehaviour
 
     [Header("Equip UI")]
     [SerializeField] private Button equipButton;
-    [SerializeField] private TMP_Text equipButtonText; // optional
-    [SerializeField] private GameObject equippedTag;   // optional (a small "Equipped" badge)
+    [SerializeField] private TMP_Text equipButtonText;  // optional
+    [SerializeField] private GameObject equippedHighlight; // optional (badge/highlight object)
 
     private ShopData data;
     private ShopManager manager;
@@ -23,7 +23,8 @@ public class InventoryItemUI : MonoBehaviour
         nameText.text = data.itemName;
         iconImage.sprite = data.itemSprite;
 
-        if (equippedTag != null) equippedTag.SetActive(isEquipped);
+        if (equippedHighlight != null)
+            equippedHighlight.SetActive(isEquipped);
 
         if (equipButtonText != null)
             equipButtonText.text = isEquipped ? "Equipped" : "Equip";
@@ -31,11 +32,6 @@ public class InventoryItemUI : MonoBehaviour
         equipButton.interactable = !isEquipped;
 
         equipButton.onClick.RemoveAllListeners();
-        equipButton.onClick.AddListener(OnEquipClicked);
-    }
-
-    private void OnEquipClicked()
-    {
-        manager.Equip(data);
+        equipButton.onClick.AddListener(() => manager.Equip(this.data));
     }
 }

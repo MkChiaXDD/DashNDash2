@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class ShopManager : MonoBehaviour
@@ -13,31 +12,56 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private Transform shopItemParent;
     [SerializeField] private TextMeshProUGUI coinText;
 
-    [Header("InventoryUI")]
+    [Header("Inventory UI")]
     [SerializeField] private GameObject inventoryItemPrefab;
     [SerializeField] private Transform inventoryItemParent;
 
-    private int coins;
+    [Header("Base Skin")]
+    [SerializeField] private ShopData baseSkin;
 
+    private int coins;
     private HashSet<int> ownedItemIDs = new HashSet<int>();
 
+    private const string OwnedKey = "OWNED_ITEM_IDS";
+    private const string CoinsKey = "Coins";
     private const string EquippedSkinKey = "EQUIPPED_SKIN_ID";
+
     private int equippedSkinID = -1;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         LoadOwned();
         LoadCoins();
-        LoadEquippedSkin();
+
+        if (baseSkin == null)
+        {
+            Debug.LogError("baseSkin is NOT assigned in Inspector.");
+            return;
+        }
+
+        if (!shopItems.Contains(baseSkin))
+            shopItems.Add(baseSkin);
+
+        ownedItemIDs.Add(baseSkin.itemID);
+
+        int equipped = PlayerPrefs.GetInt(EquippedSkinKey, -1);
+        if (equipped == -1)
+        {
+            PlayerPrefs.SetInt(EquippedSkinKey, baseSkin.itemID);
+            PlayerPrefs.Save();
+            equipped = baseSkin.itemID;
+        }
+
+        equippedSkinID = equipped;
+
+        SaveOwned();
         RefreshUI();
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.O))
-        {
             AddCoins(5);
-        }
     }
 
     public void TryBuy(ShopData item)
@@ -50,9 +74,26 @@ public class ShopManager : MonoBehaviour
 
         coins -= item.itemPrice;
         PlayerPrefs.SetInt(CoinsKey, coins);
-        ownedItemIDs.Add(item.itemID);
 
+        ownedItemIDs.Add(item.itemID);
         SaveOwned();
+
+        RefreshUI();
+    }
+
+    public void Equip(ShopData item)
+    {
+        if (!ownedItemIDs.Contains(item.itemID))
+            return;
+
+        equippedSkinID = item.itemID;
+        PlayerPrefs.SetInt(EquippedSkinKey, equippedSkinID);
+        PlayerPrefs.Save();
+
+        var applier = FindFirstObjectByType<PlayerSkinApplier>();
+        if (applier != null)
+            applier.Apply(item);
+
         RefreshUI();
     }
 
@@ -61,7 +102,6 @@ public class ShopManager : MonoBehaviour
         ClearChildren(shopItemParent);
         ClearChildren(inventoryItemParent);
 
-        // Build shop list (only NOT owned)
         foreach (var item in shopItems)
         {
             if (ownedItemIDs.Contains(item.itemID))
@@ -69,13 +109,9 @@ public class ShopManager : MonoBehaviour
 
             var go = Instantiate(shopItemPrefab, shopItemParent);
             var ui = go.GetComponent<ShopItemUI>();
-
-            bool canBuy = coins >= item.itemPrice;
-            ui.Setup(item, this, canBuy);
+            ui.Setup(item, this, coins >= item.itemPrice);
         }
 
-        // Build inventory list (only owned)
-        // Build inventory list (only owned)
         foreach (var item in shopItems)
         {
             if (!ownedItemIDs.Contains(item.itemID))
@@ -83,36 +119,11 @@ public class ShopManager : MonoBehaviour
 
             var go = Instantiate(inventoryItemPrefab, inventoryItemParent);
             var ui = go.GetComponent<InventoryItemUI>();
-
-            bool isEquipped = (item.itemID == equippedSkinID);
-            ui.Setup(item, this, isEquipped);
+            ui.Setup(item, this, item.itemID == equippedSkinID);
         }
 
-        // Refresh coin display
-        coinText.text = coins.ToString();
-    }
-
-    private void LoadEquippedSkin()
-    {
-        equippedSkinID = PlayerPrefs.GetInt(EquippedSkinKey, -1);
-    }
-
-    public void Equip(ShopData item)
-    {
-        // only allow equip if owned
-        if (!ownedItemIDs.Contains(item.itemID))
-            return;
-
-        equippedSkinID = item.itemID;
-        PlayerPrefs.SetInt(EquippedSkinKey, equippedSkinID);
-        PlayerPrefs.Save();
-
-        // Apply immediately if player exists in this scene (shop+game same scene)
-        var applier = FindFirstObjectByType<PlayerSkinApplier>();
-        if (applier != null)
-            applier.Apply(item);
-
-        RefreshUI();
+        if (coinText != null)
+            coinText.text = coins.ToString();
     }
 
     private void ClearChildren(Transform parent)
@@ -121,14 +132,9 @@ public class ShopManager : MonoBehaviour
             Destroy(parent.GetChild(i).gameObject);
     }
 
-    private const string OwnedKey = "OWNED_ITEM_IDS";
-    private const string CoinsKey = "Coins";
-
     private void SaveOwned()
     {
-        // store as comma string: "1,4,7"
-        var list = new List<int>(ownedItemIDs);
-        string s = string.Join(",", list);
+        string s = string.Join(",", new List<int>(ownedItemIDs));
         PlayerPrefs.SetString(OwnedKey, s);
         PlayerPrefs.Save();
     }
@@ -143,10 +149,8 @@ public class ShopManager : MonoBehaviour
 
         string[] parts = s.Split(',');
         foreach (var p in parts)
-        {
             if (int.TryParse(p, out int id))
                 ownedItemIDs.Add(id);
-        }
     }
 
     private void LoadCoins()
@@ -157,17 +161,12 @@ public class ShopManager : MonoBehaviour
     private void AddCoins(int amount)
     {
         coins += amount;
-
-        // save
         PlayerPrefs.SetInt(CoinsKey, coins);
         PlayerPrefs.Save();
 
-        // UI update (if you want it to reflect immediately)
         if (coinText != null)
             coinText.text = coins.ToString();
 
         Debug.Log($"Added {amount} coins. Total coins = {coins}");
     }
 }
-
-

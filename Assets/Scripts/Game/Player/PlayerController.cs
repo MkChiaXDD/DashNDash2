@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private DashManager dashMgr;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float rotationOffset;
+    [SerializeField] private ParticleSystem dashParticles;
 
     [Header("UI Controls")]
     [Tooltip("On-screen joystick (optional) for aiming")]
@@ -48,6 +49,11 @@ public class PlayerController : MonoBehaviour
 
         if (dashMgr == null)
             dashMgr = FindFirstObjectByType<DashManager>();
+    }
+
+    public void SetParticleEffect(ParticleSystem particle)
+    {
+        dashParticles = particle;
     }
 
     private void Update()
@@ -139,26 +145,30 @@ public class PlayerController : MonoBehaviour
     private IEnumerator Dash()
     {
         isDashing = true;
-        anim.PlayDash();
-        rb.gravityScale = 0f;
-        rb.linearVelocity = Vector2.zero;
 
-        Vector2 start = rb.position;
-        Vector2 end = start + aimDir * DashDist.x;
-
-        float t = 0f;
-        while (t < dashDuration)
+        if (dashParticles != null)
         {
-            rb.MovePosition(Vector2.Lerp(start, end, t / dashDuration));
-            t += Time.deltaTime;
-            yield return null;
+            var emission = dashParticles.emission;
+            emission.enabled = true;
         }
 
-        rb.MovePosition(end);
+        anim.PlayDash();
 
-        rb.gravityScale = normalGrav;
+        rb.gravityScale = 0f;
+        rb.linearVelocity = aimDir * (DashDist.x / dashDuration);
+
+        yield return new WaitForSeconds(dashDuration);
+
         rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = normalGrav;
         anim.StopDash();
+
+        if (dashParticles != null)
+        {
+            var emission = dashParticles.emission;
+            emission.enabled = false;
+        }
+
         isDashing = false;
     }
 

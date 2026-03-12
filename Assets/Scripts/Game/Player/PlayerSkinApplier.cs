@@ -24,6 +24,7 @@ public class PlayerSkinApplier : MonoBehaviour
             currentTrail = Instantiate(skin.trailPrefab, trailSocket);
             currentTrail.transform.localPosition = Vector3.zero;
             currentTrail.transform.localRotation = Quaternion.identity;
+            FindFirstObjectByType<PlayerController>()?.SetParticleEffect(currentTrail.GetComponent<ParticleSystem>());
         }
     }
 }
