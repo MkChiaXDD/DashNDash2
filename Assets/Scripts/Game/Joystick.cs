@@ -8,6 +8,9 @@ public class Joystick : MonoBehaviour
     [SerializeField] private RectTransform background;
     [SerializeField] private float handleRange = 50f;
 
+    [Header("Joystick Mode")]
+    [SerializeField] private bool useDynamicJoystick = true; // true = dynamic, false = fixed
+
     private Vector2 input = Vector2.zero;
     private Canvas canvas;
 
@@ -16,6 +19,7 @@ public class Joystick : MonoBehaviour
 
     private bool isDragging = false;
     private Vector2 originalAnchoredPos;
+    private Vector2 originalHandleAnchoredPos;
 
     public float Horizontal => input.x;
     public float Vertical => input.y;
@@ -28,8 +32,8 @@ public class Joystick : MonoBehaviour
         backgroundImages = background.GetComponentsInChildren<Image>(true);
         handleImages = handle.GetComponentsInChildren<Image>(true);
 
-        // Save original joystick position
         originalAnchoredPos = background.anchoredPosition;
+        originalHandleAnchoredPos = handle.anchoredPosition;
 
         SetJoystickVisible(true);
         ResetJoystick();
@@ -37,23 +41,29 @@ public class Joystick : MonoBehaviour
 
     private void Update()
     {
-        // Pointer DOWN ? teleport joystick
         if (IsPointerDownThisFrame())
         {
             Vector2 screenPos = GetPointerPosition();
-            Vector2 localPos;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvas.transform as RectTransform,
-                screenPos,
-                canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
-                out localPos);
+            if (useDynamicJoystick)
+            {
+                Vector2 localPos;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    canvas.transform as RectTransform,
+                    screenPos,
+                    canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
+                    out localPos);
 
-            background.anchoredPosition = localPos;
+                background.anchoredPosition = localPos;
+            }
+            else
+            {
+                background.anchoredPosition = originalAnchoredPos;
+            }
+
             isDragging = true;
         }
 
-        // Pointer HELD ? update direction
         if (isDragging && IsPointerDown())
         {
             Vector2 screenPos = GetPointerPosition();
@@ -68,7 +78,6 @@ public class Joystick : MonoBehaviour
             UpdateInput(localPos);
         }
 
-        // Pointer UP ? reset joystick
         if (isDragging && IsPointerUpThisFrame())
         {
             ResetJoystick();
@@ -85,7 +94,7 @@ public class Joystick : MonoBehaviour
     private void ResetJoystick()
     {
         input = Vector2.zero;
-        handle.anchoredPosition = Vector2.zero;
+        handle.anchoredPosition = originalHandleAnchoredPos;
         background.anchoredPosition = originalAnchoredPos;
         isDragging = false;
     }
@@ -99,7 +108,22 @@ public class Joystick : MonoBehaviour
             img.enabled = visible;
     }
 
-    // ===== Input System helpers =====
+    public void SetJoystickMode(bool dynamicMode)
+    {
+        useDynamicJoystick = dynamicMode;
+        ResetJoystick();
+    }
+
+    public void ToggleJoystickMode()
+    {
+        useDynamicJoystick = !useDynamicJoystick;
+        ResetJoystick();
+    }
+
+    public bool IsDynamicJoystick()
+    {
+        return useDynamicJoystick;
+    }
 
     private bool IsPointerDownThisFrame()
     {

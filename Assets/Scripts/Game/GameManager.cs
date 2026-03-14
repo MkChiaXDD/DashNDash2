@@ -18,17 +18,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float loseThreshold = 50f;
 
     [Header("Pause")]
-    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject pauseCanvas;
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private Image audioIcon;
     [SerializeField] private Sprite muteIcon;
     [SerializeField] private Sprite unmuteIcon;
+
+    [Header("Joystick Toggle")]
+    [SerializeField] private Joystick joystick;
+    [SerializeField] private Image joystickToggleButtonImage;
+    [SerializeField] private TMP_Text joystickToggleButtonText;
+    [SerializeField] private Color joystickOnColor = Color.green;
+    [SerializeField] private Color joystickOffColor = Color.red;
 
     [Header("Coins System")]
     [SerializeField] private float distancePerCoin;
 
     private bool pauseActive;
     private bool muted;
+    private bool joystickDynamic;
 
     private float currDist;
     private float runBestDist;
@@ -40,6 +48,7 @@ public class GameManager : MonoBehaviour
     private const string MUTE_PREF_KEY = "MasterMuted";
     private const string MIXER_PARAM = "Master";
     private const string COINS_KEY = "Coins";
+    private const string JOYSTICK_DYNAMIC_KEY = "JoystickDynamic";
 
     void Start()
     {
@@ -51,10 +60,11 @@ public class GameManager : MonoBehaviour
         highscore = PlayerPrefs.GetFloat(HIGHSCORE_KEY, 0f);
         runBestDist = player.transform.position.y;
 
-        pausePanel.SetActive(false);
+        pauseCanvas.SetActive(false);
         gameEndPanel.SetActive(false);
 
         LoadAndApplyMute();
+        LoadAndApplyJoystickMode();
         UpdateScoreUI();
     }
 
@@ -85,10 +95,9 @@ public class GameManager : MonoBehaviour
     public void OnButtonTogglePause()
     {
         pauseActive = !pauseActive;
-        pausePanel.SetActive(pauseActive);
+        pauseCanvas.SetActive(pauseActive);
         Time.timeScale = pauseActive ? 0f : 1f;
 
-        // Pause ALWAYS mutes, resume restores saved state
         if (pauseActive)
         {
             audioMixer.SetFloat(MIXER_PARAM, -80f);
@@ -103,6 +112,12 @@ public class GameManager : MonoBehaviour
     {
         muted = !muted;
         SaveAndApplyMute();
+    }
+
+    public void OnButtonToggleJoystickMode()
+    {
+        joystickDynamic = !joystickDynamic;
+        SaveAndApplyJoystickMode();
     }
 
     public void OnButtonMainMenu()
@@ -127,7 +142,34 @@ public class GameManager : MonoBehaviour
     private void ApplyMute()
     {
         audioMixer.SetFloat(MIXER_PARAM, muted ? -80f : 0f);
-        audioIcon.sprite = muted ? muteIcon : unmuteIcon;
+
+        if (audioIcon != null)
+            audioIcon.sprite = muted ? muteIcon : unmuteIcon;
+    }
+
+    private void LoadAndApplyJoystickMode()
+    {
+        joystickDynamic = PlayerPrefs.GetInt(JOYSTICK_DYNAMIC_KEY, 1) == 1;
+        ApplyJoystickMode();
+    }
+
+    private void SaveAndApplyJoystickMode()
+    {
+        PlayerPrefs.SetInt(JOYSTICK_DYNAMIC_KEY, joystickDynamic ? 1 : 0);
+        PlayerPrefs.Save();
+        ApplyJoystickMode();
+    }
+
+    private void ApplyJoystickMode()
+    {
+        if (joystick != null)
+            joystick.SetJoystickMode(joystickDynamic);
+
+        if (joystickToggleButtonImage != null)
+            joystickToggleButtonImage.color = joystickDynamic ? joystickOnColor : joystickOffColor;
+
+        if (joystickToggleButtonText != null)
+            joystickToggleButtonText.text = joystickDynamic ? "On" : "Off";
     }
 
     private void UpdateScoreUI()
@@ -150,4 +192,3 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 }
-    
