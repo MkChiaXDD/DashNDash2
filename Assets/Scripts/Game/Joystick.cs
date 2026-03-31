@@ -9,7 +9,7 @@ public class Joystick : MonoBehaviour
     [SerializeField] private float handleRange = 50f;
 
     [Header("Joystick Mode")]
-    [SerializeField] private bool useDynamicJoystick = true; // true = dynamic, false = fixed
+    [SerializeField] private bool useDynamicJoystick = true; // kept for toggle if you still want it
 
     private Vector2 input = Vector2.zero;
     private Canvas canvas;
@@ -43,23 +43,9 @@ public class Joystick : MonoBehaviour
     {
         if (IsPointerDownThisFrame())
         {
-            Vector2 screenPos = GetPointerPosition();
-
-            if (useDynamicJoystick)
-            {
-                Vector2 localPos;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    canvas.transform as RectTransform,
-                    screenPos,
-                    canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera,
-                    out localPos);
-
-                background.anchoredPosition = localPos;
-            }
-            else
-            {
-                background.anchoredPosition = originalAnchoredPos;
-            }
+            // Always keep joystick where you placed it in the editor
+            // background.anchoredPosition = originalAnchoredPos;
+            // handle.anchoredPosition = originalHandleAnchoredPos;
 
             isDragging = true;
         }
@@ -95,7 +81,7 @@ public class Joystick : MonoBehaviour
     {
         input = Vector2.zero;
         handle.anchoredPosition = originalHandleAnchoredPos;
-        background.anchoredPosition = originalAnchoredPos;
+        // background.anchoredPosition = originalAnchoredPos;
         isDragging = false;
     }
 
