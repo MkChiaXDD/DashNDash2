@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
     {
         gameEnded = true;
         Time.timeScale = 0f;
-
+        AudioManager.Instance.PlaySFX("GameOver");
         gameEndPanel.SetActive(true);
         endScoreText.text = $"{runBestDist:0.0}m";
         highscoreText.text = $"{highscore:0.0}m";
