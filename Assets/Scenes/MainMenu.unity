@@ -399,10 +399,10 @@ RectTransform:
   - {fileID: 227378363}
   m_Father: {fileID: 978952803}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 150}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 459.9439, y: -235}
+  m_SizeDelta: {x: 919.8878, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &94201017
 MonoBehaviour:
@@ -735,7 +735,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 387780306}
         m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
-        m_MethodName: OnButtonToggleBGMAudio
+        m_MethodName: OnButtonToggleSFXAudio
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1936,7 +1936,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &884572104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2942,10 +2942,10 @@ RectTransform:
   - {fileID: 1983169498}
   m_Father: {fileID: 978952803}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 150}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 459.9439, y: -75}
+  m_SizeDelta: {x: 919.8878, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1208206697
 MonoBehaviour:
@@ -3003,7 +3003,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1288861523
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5011,7 +5011,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.00086318236, y: 0}
-  m_SizeDelta: {x: -551.654, y: 300}
+  m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2009785990
 MonoBehaviour:
