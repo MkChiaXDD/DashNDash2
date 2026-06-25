@@ -28,7 +28,7 @@ public class ShopManager : MonoBehaviour
 
     private int equippedSkinID = -1;
 
-    void Start()
+    private void Start()
     {
         LoadOwned();
         LoadCoins();
@@ -40,16 +40,19 @@ public class ShopManager : MonoBehaviour
         }
 
         if (!shopItems.Contains(baseSkin))
+        {
             shopItems.Add(baseSkin);
+        }
 
         ownedItemIDs.Add(baseSkin.itemID);
 
         int equipped = PlayerPrefs.GetInt(EquippedSkinKey, -1);
+
         if (equipped == -1)
         {
-            PlayerPrefs.SetInt(EquippedSkinKey, baseSkin.itemID);
-            PlayerPrefs.Save();
             equipped = baseSkin.itemID;
+            PlayerPrefs.SetInt(EquippedSkinKey, equipped);
+            PlayerPrefs.Save();
         }
 
         equippedSkinID = equipped;
@@ -58,19 +61,25 @@ public class ShopManager : MonoBehaviour
         RefreshUI();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.O))
+        {
             AddCoins(5);
+        }
     }
 
-    public void TryBuy(ShopData item)
+    public bool TryBuy(ShopData item)
     {
         if (ownedItemIDs.Contains(item.itemID))
-            return;
+        {
+            return false;
+        }
 
         if (coins < item.itemPrice)
-            return;
+        {
+            return false;
+        }
 
         coins -= item.itemPrice;
         PlayerPrefs.SetInt(CoinsKey, coins);
@@ -79,20 +88,27 @@ public class ShopManager : MonoBehaviour
         SaveOwned();
 
         RefreshUI();
+
+        return true;
     }
 
     public void Equip(ShopData item)
     {
         if (!ownedItemIDs.Contains(item.itemID))
+        {
             return;
+        }
 
         equippedSkinID = item.itemID;
         PlayerPrefs.SetInt(EquippedSkinKey, equippedSkinID);
         PlayerPrefs.Save();
 
         var applier = FindFirstObjectByType<PlayerSkinApplier>();
+
         if (applier != null)
+        {
             applier.Apply(item);
+        }
 
         RefreshUI();
     }
@@ -104,32 +120,40 @@ public class ShopManager : MonoBehaviour
 
         foreach (var item in shopItems)
         {
-            if (ownedItemIDs.Contains(item.itemID))
-                continue;
+            bool isOwned = ownedItemIDs.Contains(item.itemID);
+            bool canBuy = coins >= item.itemPrice && !isOwned;
 
             var go = Instantiate(shopItemPrefab, shopItemParent);
             var ui = go.GetComponent<ShopItemUI>();
-            ui.Setup(item, this, coins >= item.itemPrice);
+
+            ui.Setup(item, this, canBuy, isOwned);
         }
 
         foreach (var item in shopItems)
         {
             if (!ownedItemIDs.Contains(item.itemID))
+            {
                 continue;
+            }
 
             var go = Instantiate(inventoryItemPrefab, inventoryItemParent);
             var ui = go.GetComponent<InventoryItemUI>();
+
             ui.Setup(item, this, item.itemID == equippedSkinID);
         }
 
         if (coinText != null)
+        {
             coinText.text = coins.ToString();
+        }
     }
 
     private void ClearChildren(Transform parent)
     {
         for (int i = parent.childCount - 1; i >= 0; i--)
+        {
             Destroy(parent.GetChild(i).gameObject);
+        }
     }
 
     private void SaveOwned()
@@ -144,13 +168,21 @@ public class ShopManager : MonoBehaviour
         ownedItemIDs.Clear();
 
         string s = PlayerPrefs.GetString(OwnedKey, "");
+
         if (string.IsNullOrEmpty(s))
+        {
             return;
+        }
 
         string[] parts = s.Split(',');
+
         foreach (var p in parts)
+        {
             if (int.TryParse(p, out int id))
+            {
                 ownedItemIDs.Add(id);
+            }
+        }
     }
 
     private void LoadCoins()
@@ -164,9 +196,13 @@ public class ShopManager : MonoBehaviour
         PlayerPrefs.SetInt(CoinsKey, coins);
         PlayerPrefs.Save();
 
-        if (coinText != null)
-            coinText.text = coins.ToString();
+        RefreshUI();
 
         Debug.Log($"Added {amount} coins. Total coins = {coins}");
+    }
+
+    private void OnEnable()
+    {
+        RefreshUI();
     }
 }

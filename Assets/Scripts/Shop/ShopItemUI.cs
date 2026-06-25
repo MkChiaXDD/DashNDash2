@@ -12,14 +12,22 @@ public class ShopItemUI : MonoBehaviour
     private ShopData data;
     private ShopManager manager;
 
-    public void Setup(ShopData data, ShopManager manager,bool canBuy)
+    public void Setup(ShopData data, ShopManager manager, bool canBuy, bool isOwned)
     {
         this.data = data;
         this.manager = manager;
 
         nameText.text = data.itemName;
         iconImage.sprite = data.itemSprite;
-        priceText.text = data.itemPrice.ToString();
+
+        if (isOwned)
+        {
+            priceText.text = "Bought";
+        }
+        else
+        {
+            priceText.text = data.itemPrice.ToString();
+        }
 
         buyButton.interactable = canBuy;
 

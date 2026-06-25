@@ -9,8 +9,14 @@ public class ScrollingView : MonoBehaviour
     [SerializeField] private Button nextButton;
     [SerializeField] private Button previousButton;
 
+    [Header("Scrolling")]
+    [SerializeField] private bool smoothScroll = true;
+    [SerializeField] private float scrollSpeed = 8f;
+
     private int currentIndex = 0;
     private int totalItems;
+
+    private Vector2 targetPosition;
 
     private void Start()
     {
@@ -18,6 +24,22 @@ public class ScrollingView : MonoBehaviour
 
         nextButton.onClick.AddListener(GoNext);
         previousButton.onClick.AddListener(GoPrevious);
+    }
+
+    private void Update()
+    {
+        if (smoothScroll)
+        {
+            content.anchoredPosition = Vector2.Lerp(
+                content.anchoredPosition,
+                targetPosition,
+                Time.deltaTime * scrollSpeed);
+
+            if (Vector2.Distance(content.anchoredPosition, targetPosition) < 0.1f)
+            {
+                content.anchoredPosition = targetPosition;
+            }
+        }
     }
 
     private void GoNext()
@@ -45,9 +67,7 @@ public class ScrollingView : MonoBehaviour
     private void SnapToCurrentItem()
     {
         if (totalItems <= 0)
-        {
             return;
-        }
 
         RectTransform item = content.GetChild(currentIndex) as RectTransform;
 
@@ -58,9 +78,17 @@ public class ScrollingView : MonoBehaviour
             (item.rect.width * item.pivot.x);
 
         Vector2 newPosition = content.anchoredPosition;
-        newPosition.x = viewportCenter - itemCenter + 170;
+        newPosition.x = viewportCenter - itemCenter + 190;
 
-        content.anchoredPosition = newPosition;
+        if (smoothScroll)
+        {
+            targetPosition = newPosition;
+        }
+        else
+        {
+            content.anchoredPosition = newPosition;
+            targetPosition = newPosition;
+        }
     }
 
     private void UpdateButtons()
@@ -77,6 +105,8 @@ public class ScrollingView : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         totalItems = content.childCount;
+
+        targetPosition = content.anchoredPosition;
 
         SnapToCurrentItem();
         UpdateButtons();
