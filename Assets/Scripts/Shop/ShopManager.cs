@@ -120,6 +120,12 @@ public class ShopManager : MonoBehaviour
 
         foreach (var item in shopItems)
         {
+            // Don't show the base skin in the shop
+            if (item == baseSkin)
+            {
+                continue;
+            }
+
             bool isOwned = ownedItemIDs.Contains(item.itemID);
             bool canBuy = coins >= item.itemPrice && !isOwned;
 

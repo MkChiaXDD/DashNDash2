@@ -12,73 +12,93 @@ public class BorderController : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float fieldWidthPercent = 0.75f;
 
-    // remember floor’s scene position so we never move it
-    private Vector3 _floorOriginalPos;
-
-    void Awake()
+    private void OnValidate()
     {
-        if (floor)
-            _floorOriginalPos = floor.transform.position;
+        UpdateBorders();
     }
 
-    void OnValidate() => UpdateBorders();
-    void Start() => UpdateBorders();
-    void LateUpdate() { if (Application.isPlaying) UpdateBorders(); }
+    private void Start()
+    {
+        UpdateBorders();
+    }
+
+    private void LateUpdate()
+    {
+        if (Application.isPlaying)
+        {
+            UpdateBorders();
+        }
+    }
 
     private void UpdateBorders()
     {
-        var cam = Camera.main;
+        Camera cam = Camera.main;
         if (cam == null) return;
 
         float worldH = cam.orthographicSize * 2f;
         float worldW = worldH * cam.aspect;
         float fieldW = worldW * fieldWidthPercent;
+
         Vector3 camPos = cam.transform.position;
 
-        // —— FLOOR —— (only scale X, never move)
-        if (floor)
+        // FLOOR
+        if (floor != null)
         {
-            var bc = floor.GetComponent<BoxCollider2D>();
-            if (bc)
+            BoxCollider2D bc = floor.GetComponent<BoxCollider2D>();
+
+            if (bc != null)
             {
                 Vector3 ls = floor.transform.localScale;
                 ls.x = fieldW / bc.size.x;
                 floor.transform.localScale = ls;
 
-                // restore original position
-                floor.transform.position = _floorOriginalPos;
+                floor.transform.position = new Vector3(
+                    camPos.x,
+                    floor.transform.position.y,
+                    floor.transform.position.z
+                );
             }
         }
 
-        // —— LEFT WALL ——
-        if (leftWall)
+        // LEFT WALL
+        if (leftWall != null)
         {
-            var bc = leftWall.GetComponent<BoxCollider2D>();
-            if (bc)
+            BoxCollider2D bc = leftWall.GetComponent<BoxCollider2D>();
+
+            if (bc != null)
             {
                 Vector3 ls = leftWall.transform.localScale;
                 ls.y = worldH / bc.size.y;
                 leftWall.transform.localScale = ls;
 
-                float halfW = (bc.size.x * ls.x) / 2f;
-                float x = camPos.x - fieldW / 2f - halfW;
-                leftWall.transform.position = new Vector3(x, camPos.y, leftWall.transform.position.z);
+                float x = camPos.x - fieldW * 0.5f;
+
+                leftWall.transform.position = new Vector3(
+                    x,
+                    camPos.y,
+                    leftWall.transform.position.z
+                );
             }
         }
 
-        // —— RIGHT WALL ——
-        if (rightWall)
+        // RIGHT WALL
+        if (rightWall != null)
         {
-            var bc = rightWall.GetComponent<BoxCollider2D>();
-            if (bc)
+            BoxCollider2D bc = rightWall.GetComponent<BoxCollider2D>();
+
+            if (bc != null)
             {
                 Vector3 ls = rightWall.transform.localScale;
                 ls.y = worldH / bc.size.y;
                 rightWall.transform.localScale = ls;
 
-                float halfW = (bc.size.x * ls.x) / 2f;
-                float x = camPos.x + fieldW / 2f + halfW;
-                rightWall.transform.position = new Vector3(x, camPos.y, rightWall.transform.position.z);
+                float x = camPos.x + fieldW * 0.5f;
+
+                rightWall.transform.position = new Vector3(
+                    x,
+                    camPos.y,
+                    rightWall.transform.position.z
+                );
             }
         }
     }

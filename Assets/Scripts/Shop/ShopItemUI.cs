@@ -22,7 +22,7 @@ public class ShopItemUI : MonoBehaviour
 
         if (isOwned)
         {
-            priceText.text = "Bought";
+            priceText.text = "Owned";
         }
         else
         {
