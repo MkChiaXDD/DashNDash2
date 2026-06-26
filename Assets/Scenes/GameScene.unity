@@ -1120,8 +1120,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 75, y: -75}
-  m_SizeDelta: {x: 85, y: 85}
+  m_AnchoredPosition: {x: 150, y: -150}
+  m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &454239951
 MonoBehaviour:
@@ -6036,7 +6036,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -6084,7 +6084,7 @@ MonoBehaviour:
   joystick: {fileID: 1897610112}
   scalePercent: 0.05
   aimIndicator: {fileID: 163926083}
-  aimThickness: 0.1
+  aimThickness: 0.05
   aimIndicatorLengthPercent: 0.3
   anim: {fileID: 2074430623}
 --- !u!58 &2074430619

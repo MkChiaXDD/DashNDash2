@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: baa3a39027f05d446b4cf19fb47e0eea
+guid: e91668b8972c1a3428ba156381e1ef8f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7712889252448647843
-    second: Dash 1_0
+      213: -3482474599738621114
+    second: whiteorb_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Dash 1_0
+      name: whiteorb_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 3
-        width: 25
-        height: 21
+        x: 0
+        y: 1
+        width: 419
+        height: 420
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3aa312419efa90b60800000000000000
-      internalID: 7712889252448647843
+      spriteID: 643424f6dc3cbafc0800000000000000
+      internalID: -3482474599738621114
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Dash 1_0: 7712889252448647843
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
