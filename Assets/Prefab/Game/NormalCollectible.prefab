@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 0b075eff8722ee24f8d46b472e0b612c, type: 2}
   scalePercent: 0.05
+  lifetime: 15
 --- !u!114 &3479239419823936984
 MonoBehaviour:
   m_ObjectHideFlags: 0

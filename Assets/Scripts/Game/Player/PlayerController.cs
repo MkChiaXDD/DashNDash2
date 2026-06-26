@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("Aim Indicator (Child Line)")]
     [SerializeField] private Transform aimIndicator; // child object (line)
     [SerializeField] private float aimThickness = 0.15f;
+    [SerializeField, Range(0.1f, 1f)] private float aimIndicatorLengthPercent = 0.5f;
 
     [Header("Player Animation Controller")]
     [SerializeField] private PlayerAnim anim;
@@ -119,16 +120,15 @@ public class PlayerController : MonoBehaviour
         if (!joystickActive)
             return;
 
-        // ?? MATCH AIM LINE LENGTH TO DASH DISTANCE (WORLD UNITS)
-        float dashDistance = DashDist.x;
+        float dashDistance = DashDist.x * aimIndicatorLengthPercent;
 
         aimIndicator.localScale = new Vector3(
-            dashDistance / 1.5f,   // length
-            aimThickness,   // thickness
+            dashDistance / 1.5f,
+            aimThickness,
             1f
         );
 
-        aimIndicator.localPosition = new Vector3(dashDistance / 3, 0f, 0f);
+        aimIndicator.localPosition = new Vector3(dashDistance / 3f, 0f, 0f);
     }
 
     // ---------------- DASH ----------------

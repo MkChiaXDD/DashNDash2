@@ -44,7 +44,7 @@ public class CollectibleSpawner : MonoBehaviour
         xRangeWorld = ScreenSizeHelper.PercentWidthToWorld(spawnXPercent);
 
         Vector2 dashDist = speedManager != null ? speedManager.GetDashDistance() : Vector2.up * 5f;
-        yOffsetWorld = dashDist.y * 0.8f;
+        yOffsetWorld = dashDist.y * 0.9f;
 
         float screenW = ScreenSizeHelper.ScreenWorldWidth;
         halfField = screenW * fieldWidthPercent * 0.5f;

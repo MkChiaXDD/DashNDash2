@@ -7,10 +7,6 @@ public class SpeedManager : MonoBehaviour
     [Range(0f, 1f)]
     public float dashPercent = 0.1f;
 
-    /// <summary>
-    /// Returns a Vector2 where both components equal the world-space dash distance,
-    /// calculated as dashPercent of the **screen width**.
-    /// </summary>
     public Vector2 GetDashDistance()
     {
         // Convert dashPercent of screen width into world units

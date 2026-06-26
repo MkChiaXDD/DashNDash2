@@ -11,6 +11,9 @@ public class Joystick : MonoBehaviour
     [Header("Joystick Mode")]
     [SerializeField] private bool useDynamicJoystick = true; // kept for toggle if you still want it
 
+    [SerializeField] private GameObject settingsCanvas;
+    [SerializeField] private GameObject gameEndCanvas;
+
     private Vector2 input = Vector2.zero;
     private Canvas canvas;
 
@@ -41,6 +44,8 @@ public class Joystick : MonoBehaviour
 
     private void Update()
     {
+        if (settingsCanvas.activeInHierarchy == true || gameEndCanvas.activeInHierarchy == true) return;
+
         if (IsPointerDownThisFrame())
         {
             // Always keep joystick where you placed it in the editor

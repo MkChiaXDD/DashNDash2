@@ -78,7 +78,7 @@ public class ScrollingView : MonoBehaviour
             (item.rect.width * item.pivot.x);
 
         Vector2 newPosition = content.anchoredPosition;
-        newPosition.x = viewportCenter - itemCenter + 190;
+        newPosition.x = viewportCenter - itemCenter + 165;
 
         if (smoothScroll)
         {
