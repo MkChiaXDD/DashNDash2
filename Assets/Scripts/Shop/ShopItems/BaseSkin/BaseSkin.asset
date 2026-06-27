@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BaseSkin
   m_EditorClassIdentifier: 
   itemID: 0
-  itemName: Chicken
-  itemSprite: {fileID: 689901400721174899, guid: 199cff305f15ad0478bc03ce7e795108, type: 3}
+  itemName: Burd
+  itemSprite: {fileID: -4820330032771365240, guid: 80637eb2c050414429038731bf8454d9, type: 3}
   itemPrice: 0
   animatorOverride: {fileID: 22100000, guid: 61810d8be3d231644b0d45eb191596c1, type: 2}
   trailPrefab: {fileID: 5619125627671313669, guid: e75d078f01a23bc47975e8613dea8f4f, type: 3}
