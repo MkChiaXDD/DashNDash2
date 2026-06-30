@@ -1193,6 +1193,7 @@ GameObject:
   - component: {fileID: 387780305}
   - component: {fileID: 387780306}
   - component: {fileID: 387780307}
+  - component: {fileID: 387780308}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -1257,6 +1258,20 @@ MonoBehaviour:
   inventoryItemPrefab: {fileID: 4686155210184324452, guid: d1a9003b5a5d9e447887a9d930bba3f4, type: 3}
   inventoryItemParent: {fileID: 651686999}
   baseSkin: {fileID: 11400000, guid: bc676ff9de56eb64bbe1b5f011e7a861, type: 2}
+--- !u!114 &387780308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387780304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6115053b433d7ce41b5f27e317e21893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxSource: {fileID: 993300547}
+  clickSound: {fileID: 8300000, guid: f3045223413c9b149a3ae7cefbb25f2c, type: 3}
 --- !u!1 &388646348
 GameObject:
   m_ObjectHideFlags: 0
